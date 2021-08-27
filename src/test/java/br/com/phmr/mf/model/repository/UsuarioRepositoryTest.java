@@ -5,12 +5,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import br.com.phmr.mf.model.entity.Usuario;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
+@ActiveProfiles("test")
 public class UsuarioRepositoryTest {
 
 	@Autowired
@@ -26,5 +28,14 @@ public class UsuarioRepositoryTest {
 		// Verificação
 		Assertions.assertThat(result).isTrue();
 	}
+	
+	@Test
+	public void verificarNaoExistenciaEmail() {
+		// Execução
+		boolean result = repository.existsByEmail("teste222@gmail.com");
+		// Verificação
+		Assertions.assertThat(result).isFalse();
+	}
+	
 
 }
