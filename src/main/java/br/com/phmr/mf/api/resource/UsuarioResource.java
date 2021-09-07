@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.phmr.mf.api.dto.UsuarioDTO;
+import br.com.phmr.mf.exceptions.ErroAutenticacao;
 import br.com.phmr.mf.model.entity.Usuario;
 import br.com.phmr.mf.service.UsuarioService;
 
@@ -19,6 +20,16 @@ public class UsuarioResource {
 
 	public UsuarioResource(UsuarioService service) {
 		this.service = service;
+	}
+
+	@PostMapping("/autenticar")
+	public ResponseEntity autenticar(@RequestBody UsuarioDTO dto) {
+		try {
+			Usuario usrAutenticado = service.autenticar(dto.getEmail(), dto.getSenha());
+			return ResponseEntity.ok(usrAutenticado);
+		} catch (ErroAutenticacao e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
 	}
 
 	@PostMapping
