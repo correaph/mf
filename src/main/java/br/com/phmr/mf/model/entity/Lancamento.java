@@ -35,10 +35,11 @@ public class Lancamento {
 	@Column(name = "id")
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private Long id;
 
 	private Integer mes;
 	private Integer ano;
+	private String descricao;
 
 	@ManyToOne
 	@JoinColumn(name = "id_isuario")
