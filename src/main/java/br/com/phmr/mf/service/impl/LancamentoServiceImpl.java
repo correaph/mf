@@ -3,6 +3,7 @@ package br.com.phmr.mf.service.impl;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -43,10 +44,9 @@ public class LancamentoServiceImpl implements LancamentoService {
 
 	@Override
 	@Transactional
-	public void deletar(Lancamento lancamento) {
-		Objects.requireNonNull(lancamento.getId());
-		repository.deleteById(lancamento.getId());
-		;
+	public void deletar(Long id) {
+		Objects.requireNonNull(id);
+		repository.deleteById(id);
 	}
 
 	@Override
@@ -76,7 +76,7 @@ public class LancamentoServiceImpl implements LancamentoService {
 		if (lancamento.getAno() == null || lancamento.getAno().toString().length() != 4) {
 			throw new RegraNegocioException("Ano inválido");
 		}
-		if (lancamento.getUsuario() == null || lancamento.getId() == null) {
+		if (lancamento.getUsuario() == null) {
 			throw new RegraNegocioException("Usuário não informado!");
 		}
 		if (lancamento.getValor() == null || lancamento.getValor().compareTo(BigDecimal.ZERO) <= 0) {
@@ -85,6 +85,11 @@ public class LancamentoServiceImpl implements LancamentoService {
 		if (lancamento.getTipo() == null) {
 			throw new RegraNegocioException("Tipo de lançamento inválido!");
 		}
+	}
+
+	@Override
+	public Optional<Lancamento> obterPorId(Long id) {
+		return repository.findById(id);
 	}
 
 }
