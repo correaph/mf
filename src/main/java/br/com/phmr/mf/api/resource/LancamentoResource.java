@@ -2,7 +2,6 @@ package br.com.phmr.mf.api.resource;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.phmr.mf.api.dto.LancamentoDTO;
+import br.com.phmr.mf.api.dto.StatusDTO;
 import br.com.phmr.mf.exceptions.RegraNegocioException;
 import br.com.phmr.mf.model.entity.Lancamento;
 import br.com.phmr.mf.model.entity.Usuario;
@@ -51,7 +51,23 @@ public class LancamentoResource {
 			if (lancamento.isPresent()) {
 				Lancamento lancUpd = getLancamento(dto);
 				lancUpd.setId(id);
-				return ResponseEntity.ok(service.salvar(lancUpd));
+				return ResponseEntity.ok(service.atualizar(lancUpd));
+			} else {
+				return ResponseEntity.badRequest().body("Lancamento não encontrado para id " + id);
+			}
+		} catch (Exception ex) {
+			return ResponseEntity.badRequest().body(ex.getMessage());
+		}
+	}
+
+	@PutMapping("{id}/atualizar-status")
+	public ResponseEntity atualizarStatus(@PathVariable("id") Long id, @RequestBody StatusDTO statusDTO) {
+		try {
+			Optional<Lancamento> lancamento = service.obterPorId(id);
+			if (lancamento.isPresent()) {
+				Lancamento lancUpd = lancamento.get();
+				lancUpd.setStatus(StatusLancamento.valueOf(statusDTO.getStatus()));
+				return ResponseEntity.ok(service.atualizar(lancUpd));
 			} else {
 				return ResponseEntity.badRequest().body("Lancamento não encontrado para id " + id);
 			}
