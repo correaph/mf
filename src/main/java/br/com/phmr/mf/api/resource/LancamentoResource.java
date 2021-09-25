@@ -74,7 +74,7 @@ public class LancamentoResource {
 	public ResponseEntity buscar(@RequestParam(value = "descricao", required = false) String descricao,
 			@RequestParam(value = "mes", required = false) Integer mes,
 			@RequestParam(value = "ano", required = false) Integer ano,
-			@RequestParam(value = "usuario", required = false) long idUsr) {
+			@RequestParam(value = "usuario", required = true) long idUsr) {
 		try {
 			Lancamento lancFiltro = new Lancamento();
 			lancFiltro.setDescricao(descricao);
